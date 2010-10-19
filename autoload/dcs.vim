@@ -20,7 +20,7 @@ function! dcs#load() "{{{
 endfunction "}}}
 
 
-function! dcs#detect(bufnr) "{{{
+function! dcs#detect_from_bufnr(bufnr) "{{{
     let NONE = 0
     let ft = getbufvar(a:bufnr, '&filetype')
     if !dcs#supported_filetype(ft)

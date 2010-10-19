@@ -18,7 +18,7 @@ if !exists('g:dcs_no_default_autocmd')
 endif
 
 
-command! -bar DetectCodingStyle call dcs#detect(expand('%'))
+command! -bar DetectCodingStyle call dcs#detect_from_bufnr(expand('%'))
 
 if !g:dcs_no_default_autocmd
     augroup detect-coding-style
