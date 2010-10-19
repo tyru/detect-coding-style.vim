@@ -11,7 +11,6 @@ set cpo&vim
 let s:filetype_vs_range_pattern = {
 \   'vim' : ['^\s*\<fu\%[nction]\>\(!\)\@<!', '^\s*\<endf\%[unction]\>'],
 \}
-let s:coding_styles = {}
 
 
 
@@ -50,9 +49,7 @@ function! s:register_installed_styles() "{{{
     for file in split(globpath(&rtp, 'autoload/dcs/styles/*.vim'), '\n')
         let name = fnamemodify(file, ':t:r')
         let style = dcs#styles#{name}#define()
-        if s:check_style_dict(style)
-            let s:coding_styles[name] = style
-        else
+        if !s:DetectorManager.register(name, style)
             echohl WarningMsg
             echomsg "warning: dcs: plugin '" . name
             \   . "' returned invalid object."
@@ -62,25 +59,42 @@ function! s:register_installed_styles() "{{{
 
     let s:done_register_installed_styles = 1
 endfunction "}}}
-function! dcs#detect_from_lines(lines) "{{{
-    for name in sort(keys(s:coding_styles))
-        let style = s:coding_styles[name]
-        if style.detect_from_lines(a:lines)
-            execute style.excmd
-            let b:dcs_current_style = name
-            return 1
-        endif
-    endfor
-    return 0
+function! dcs#detect_from_lines(...) "{{{
+    call s:DetectorManager.delegate('detect_from_lines', a:000)
 endfunction "}}}
 function! dcs#supported_filetype(filetype) "{{{
     return has_key(s:filetype_vs_range_pattern, a:filetype)
+endfunction "}}}
+
+
+" s:DetectorManager {{{
+let s:DetectorManager = {'__detectors': {}}
+
+function! s:DetectorManager.register(name, detector) "{{{
+    if s:check_style_dict(a:detector)
+        let self.__detectors[a:name] = a:detector
+        return 1
+    endif
+    return 0
 endfunction "}}}
 function! s:check_style_dict(dict) "{{{
     return
     \   has_key(a:dict, 'detect_from_lines')
     \   && has_key(a:dict, 'excmd')
 endfunction "}}}
+function! s:DetectorManager.delegate(method_name, args) "{{{
+    for name in sort(keys(self.__detectors))
+        let style = self.__detectors[name]
+
+        if call(style[a:method_name], a:args, style)
+            execute style.excmd
+            let b:dcs_current_style = name
+            return
+        endif
+    endfor
+endfunction "}}}
+
+" }}}
 
 
 " Restore 'cpoptions' {{{
