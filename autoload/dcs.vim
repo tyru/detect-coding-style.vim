@@ -76,11 +76,6 @@ endfunction "}}}
 function! dcs#supported_filetype(filetype) "{{{
     return has_key(s:filetype_vs_range_pattern, a:filetype)
 endfunction "}}}
-function! dcs#register_style(name, dict) "{{{
-    if s:check_style_dict(a:dict)
-        let s:coding_styles[a:name] = a:dict
-    endif
-endfunction "}}}
 function! s:check_style_dict(dict) "{{{
     return
     \   has_key(a:dict, 'detect_from_lines')
