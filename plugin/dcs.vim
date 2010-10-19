@@ -31,10 +31,12 @@ if !exists('g:dcs_no_default_autocmd')
 endif
 
 
+command! -bar DetectCodingStyle call dcs#detect(expand('%'))
+
 if !g:dcs_no_default_autocmd
     augroup detect-coding-style
         autocmd!
-        autocmd BufEnter * call dcs#detect(expand('%'))
+        autocmd BufEnter * DetectCodingStyle
     augroup END
 endif
 
