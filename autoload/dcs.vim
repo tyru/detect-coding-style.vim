@@ -46,6 +46,13 @@ function! s:register_installed_detectors() "{{{
         return
     endif
 
+    " autoload/dcs/detectors/*.vim settings is only about tab.
+    " See the followings for the details:
+    "   http://www.jukie.net/bart/blog/vim-and-linux-coding-style
+    "   http://yuanjie-huang.blogspot.com/2009/03/vim-in-gnu-coding-style.html
+    "   http://en.wikipedia.org/wiki/Indent_style
+    " But wikipedia is dubious, I think :(
+
     for file in split(globpath(&rtp, 'autoload/dcs/detectors/*.vim'), '\n')
         let name = fnamemodify(file, ':t:r')
         let detector = dcs#detectors#{name}#define()
