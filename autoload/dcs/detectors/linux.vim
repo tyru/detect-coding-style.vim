@@ -7,7 +7,7 @@ set cpo&vim
 " }}}
 
 
-function! dcs#styles#linux#define() "{{{
+function! dcs#detectors#linux#define() "{{{
     let o = {}
     let o.excmd =
     \   'setlocal expandtab tabstop=8 '

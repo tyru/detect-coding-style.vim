@@ -38,18 +38,18 @@ function! dcs#detect_from_bufnr(bufnr) "{{{
         return NONE
     endif
 
-    call s:register_installed_styles()
+    call s:register_installed_detectors()
     return dcs#detect_from_lines(whole_lines[start : end])
 endfunction "}}}
-function! s:register_installed_styles() "{{{
-    if exists('s:done_register_installed_styles')
+function! s:register_installed_detectors() "{{{
+    if exists('s:done_register_installed_detectors')
         return
     endif
 
-    for file in split(globpath(&rtp, 'autoload/dcs/styles/*.vim'), '\n')
+    for file in split(globpath(&rtp, 'autoload/dcs/detectors/*.vim'), '\n')
         let name = fnamemodify(file, ':t:r')
-        let style = dcs#styles#{name}#define()
-        if !s:DetectorManager.register(name, style)
+        let detector = dcs#detectors#{name}#define()
+        if !s:DetectorManager.register(name, detector)
             echohl WarningMsg
             echomsg "warning: dcs: plugin '" . name
             \   . "' returned invalid object."
@@ -57,7 +57,7 @@ function! s:register_installed_styles() "{{{
         endif
     endfor
 
-    let s:done_register_installed_styles = 1
+    let s:done_register_installed_detectors = 1
 endfunction "}}}
 function! dcs#detect_from_lines(...) "{{{
     call s:DetectorManager.delegate('detect_from_lines', a:000)
@@ -71,24 +71,24 @@ endfunction "}}}
 let s:DetectorManager = {'__detectors': {}}
 
 function! s:DetectorManager.register(name, detector) "{{{
-    if self._check_style_dict(a:detector)
+    if self._check_detector_dict(a:detector)
         let self.__detectors[a:name] = a:detector
         return 1
     endif
     return 0
 endfunction "}}}
-function! s:DetectorManager._check_style_dict(dict) "{{{
+function! s:DetectorManager._check_detector_dict(dict) "{{{
     return
     \   has_key(a:dict, 'detect_from_lines')
     \   && has_key(a:dict, 'excmd')
 endfunction "}}}
 function! s:DetectorManager.delegate(method_name, args) "{{{
     for name in sort(keys(self.__detectors))
-        let style = self.__detectors[name]
+        let detector = self.__detectors[name]
 
-        if call(style[a:method_name], a:args, style)
-            execute style.excmd
-            let b:dcs_current_style = name
+        if call(detector[a:method_name], a:args, detector)
+            execute detector.excmd
+            let b:dcs_current_detector = name
             return
         endif
     endfor
