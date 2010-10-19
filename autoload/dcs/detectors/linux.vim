@@ -9,7 +9,7 @@ set cpo&vim
 
 function! dcs#detectors#linux#define() "{{{
     let o = {}
-    let o.excmd =
+    let o.hook_excmd =
     \   'setlocal expandtab tabstop=8 '
     \   . 'shiftwidth=8 softtabstop& preserveindent'
     function! o.detect_from_lines(lines)

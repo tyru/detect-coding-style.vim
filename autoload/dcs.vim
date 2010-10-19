@@ -87,14 +87,14 @@ endfunction "}}}
 function! s:DetectorManager._check_detector_dict(dict) "{{{
     return
     \   has_key(a:dict, 'detect_from_lines')
-    \   && has_key(a:dict, 'excmd')
+    \   && has_key(a:dict, 'hook_excmd')
 endfunction "}}}
 function! s:DetectorManager.delegate_each(method_name, args) "{{{
     for name in sort(keys(self.__detectors))
         let detector = self.__detectors[name]
 
         if call(detector[a:method_name], a:args, detector)
-            execute detector.excmd
+            execute detector.hook_excmd
             let b:dcs_current_detector = name
             return
         endif
