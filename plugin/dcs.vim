@@ -22,6 +22,10 @@ command!
 \   -bar
 \   DetectCodingStyle
 \   call dcs#detect_from_bufnr(expand('%'))
+command!
+\   -bar -nargs=1 -complete=customlist,dcs#_cmd_complete_conding_style
+\   CodingStyle
+\   call dcs#_cmd_coding_style(<q-args>)
 
 if !g:dcs_no_default_autocmd
     augroup detect-coding-style

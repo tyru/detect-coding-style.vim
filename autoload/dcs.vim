@@ -100,8 +100,23 @@ function! s:DetectorManager.delegate_each(method_name, args) "{{{
         endif
     endfor
 endfunction "}}}
+function! s:DetectorManager.run_hook_excmd(detector_name) "{{{
+    execute self.__detectors[a:detector_name].hook_excmd
+endfunction "}}}
+function! s:DetectorManager.get_all_detector_names() "{{{
+    return sort(keys(self.__detectors))
+endfunction "}}}
 
 " }}}
+
+
+" :CodingStyle
+function! dcs#_cmd_coding_style(choice) "{{{
+    call s:DetectorManager.run_hook_excmd(a:choice)
+endfunction "}}}
+function! dcs#_cmd_complete_conding_style(...) "{{{
+    return s:DetectorManager.get_all_detector_names()
+endfunction "}}}
 
 
 " Restore 'cpoptions' {{{
