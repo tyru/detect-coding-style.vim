@@ -71,13 +71,13 @@ endfunction "}}}
 let s:DetectorManager = {'__detectors': {}}
 
 function! s:DetectorManager.register(name, detector) "{{{
-    if s:check_style_dict(a:detector)
+    if self._check_style_dict(a:detector)
         let self.__detectors[a:name] = a:detector
         return 1
     endif
     return 0
 endfunction "}}}
-function! s:check_style_dict(dict) "{{{
+function! s:DetectorManager._check_style_dict(dict) "{{{
     return
     \   has_key(a:dict, 'detect_from_lines')
     \   && has_key(a:dict, 'excmd')
