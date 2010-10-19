@@ -13,19 +13,24 @@ set cpo&vim
 " }}}
 
 
-if !exists('g:dcs_coding_styles')
-    let g:dcs_coding_styles = {
-    \   'gnu': 'setlocal expandtab tabstop=8 '
-    \           . 'shiftwidth=2 softtabstop=2 '
-    \           . 'preserveindent',
-    \   'bsd': 'setlocal expandtab tabstop=8 '
-    \           . 'shiftwidth=4 softtabstop& '
-    \           . 'preserveindent',
-    \   'linux': 'setlocal expandtab tabstop=8 '
-    \           . 'shiftwidth=8 softtabstop& '
-    \           . 'preserveindent',
-    \}
+let s:tmpl = {
+\   'gnu': 'setlocal expandtab tabstop=8 '
+\           . 'shiftwidth=2 softtabstop=2 '
+\           . 'preserveindent',
+\   'bsd': 'setlocal expandtab tabstop=8 '
+\           . 'shiftwidth=4 softtabstop& '
+\           . 'preserveindent',
+\   'linux': 'setlocal expandtab tabstop=8 '
+\           . 'shiftwidth=8 softtabstop& '
+\           . 'preserveindent',
+\}
+if exists('g:dcs_coding_styles')
+    call extend(g:dcs_coding_styles, s:tmpl, 'keep')
+else
+    let g:dcs_coding_styles = s:tmpl
 endif
+unlet s:tmpl
+
 if !exists('g:dcs_no_default_autocmd')
     let g:dcs_no_default_autocmd = 0
 endif

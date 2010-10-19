@@ -53,6 +53,8 @@ function! dcs#detect_from_lines(lines) "{{{
         execute g:dcs_coding_styles.bsd
     elseif s:is_maybe_linux(a:lines)
         execute g:dcs_coding_styles.linux
+    elseif has_key(g:dcs_coding_styles, 'user')
+        execute g:dcs_coding_styles.user
     endif
 endfunction "}}}
 
