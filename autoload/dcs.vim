@@ -49,12 +49,16 @@ endfunction "}}}
 function! dcs#detect_from_lines(lines) "{{{
     if s:is_maybe_gnu(a:lines)
         execute g:dcs_coding_styles.gnu
+        let b:dcs_current_style = 'gnu'
     elseif s:is_maybe_bsd(a:lines)
         execute g:dcs_coding_styles.bsd
+        let b:dcs_current_style = 'bsd'
     elseif s:is_maybe_linux(a:lines)
         execute g:dcs_coding_styles.linux
+        let b:dcs_current_style = 'linux'
     elseif has_key(g:dcs_coding_styles, 'user')
         execute g:dcs_coding_styles.user
+        let b:dcs_current_style = 'user'
     endif
 endfunction "}}}
 
