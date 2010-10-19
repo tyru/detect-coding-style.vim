@@ -15,13 +15,13 @@ set cpo&vim
 
 if !exists('g:dcs_coding_styles')
     let g:dcs_coding_styles = {
-    \   'gnu': 'set expandtab tabstop=8 '
+    \   'gnu': 'setlocal expandtab tabstop=8 '
     \           . 'shiftwidth=2 softtabstop=2 '
     \           . 'preserveindent',
-    \   'bsd': 'set expandtab tabstop=8 '
+    \   'bsd': 'setlocal expandtab tabstop=8 '
     \           . 'shiftwidth=4 softtabstop& '
     \           . 'preserveindent',
-    \   'linux': 'set expandtab tabstop=8 '
+    \   'linux': 'setlocal expandtab tabstop=8 '
     \           . 'shiftwidth=8 softtabstop& '
     \           . 'preserveindent',
     \}
