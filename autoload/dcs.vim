@@ -39,26 +39,10 @@ function! dcs#detect(bufnr) "{{{
         return NONE
     endif
 
-    call dcs#register_installed_styles()
+    call s:register_installed_styles()
     return dcs#detect_from_lines(whole_lines[start : end])
 endfunction "}}}
-
-function! dcs#supported_filetype(filetype) "{{{
-    return has_key(s:filetype_vs_range_pattern, a:filetype)
-endfunction "}}}
-
-function! dcs#register_style(name, dict) "{{{
-    if s:check_style_dict(a:dict)
-        let s:coding_styles[a:name] = a:dict
-    endif
-endfunction "}}}
-function! s:check_style_dict(dict) "{{{
-    return
-    \   has_key(a:dict, 'detect_from_lines')
-    \   && has_key(a:dict, 'excmd')
-endfunction "}}}
-
-function! dcs#register_installed_styles() "{{{
+function! s:register_installed_styles() "{{{
     if exists('s:done_register_installed_styles')
         return
     endif
@@ -78,7 +62,6 @@ function! dcs#register_installed_styles() "{{{
 
     let s:done_register_installed_styles = 1
 endfunction "}}}
-
 function! dcs#detect_from_lines(lines) "{{{
     for name in sort(keys(s:coding_styles))
         let style = s:coding_styles[name]
@@ -89,6 +72,19 @@ function! dcs#detect_from_lines(lines) "{{{
         endif
     endfor
     return 0
+endfunction "}}}
+function! dcs#supported_filetype(filetype) "{{{
+    return has_key(s:filetype_vs_range_pattern, a:filetype)
+endfunction "}}}
+function! dcs#register_style(name, dict) "{{{
+    if s:check_style_dict(a:dict)
+        let s:coding_styles[a:name] = a:dict
+    endif
+endfunction "}}}
+function! s:check_style_dict(dict) "{{{
+    return
+    \   has_key(a:dict, 'detect_from_lines')
+    \   && has_key(a:dict, 'excmd')
 endfunction "}}}
 
 
