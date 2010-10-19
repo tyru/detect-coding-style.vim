@@ -67,7 +67,7 @@ function! s:register_installed_detectors() "{{{
     let s:done_register_installed_detectors = 1
 endfunction "}}}
 function! dcs#detect_from_lines(...) "{{{
-    call s:DetectorManager.delegate('detect_from_lines', a:000)
+    call s:DetectorManager.delegate_each('detect_from_lines', a:000)
 endfunction "}}}
 function! dcs#supported_filetype(filetype) "{{{
     return has_key(s:filetype_vs_range_pattern, a:filetype)
@@ -89,7 +89,7 @@ function! s:DetectorManager._check_detector_dict(dict) "{{{
     \   has_key(a:dict, 'detect_from_lines')
     \   && has_key(a:dict, 'excmd')
 endfunction "}}}
-function! s:DetectorManager.delegate(method_name, args) "{{{
+function! s:DetectorManager.delegate_each(method_name, args) "{{{
     for name in sort(keys(self.__detectors))
         let detector = self.__detectors[name]
 
