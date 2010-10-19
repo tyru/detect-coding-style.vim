@@ -11,6 +11,7 @@ set cpo&vim
 let s:filetype_vs_range_pattern = {
 \   'vim' : ['^\s*\<fu\%[nction]\>\(!\)\@<!', '^\s*\<endf\%[unction]\>'],
 \}
+let s:coding_styles = {}
 
 
 
@@ -38,6 +39,7 @@ function! dcs#detect(bufnr) "{{{
         return NONE
     endif
 
+    call dcs#register_installed_styles()
     return dcs#detect_from_lines(whole_lines[start : end])
 endfunction "}}}
 
@@ -45,52 +47,47 @@ function! dcs#supported_filetype(filetype) "{{{
     return has_key(s:filetype_vs_range_pattern, a:filetype)
 endfunction "}}}
 
-function! dcs#get_available_styles() "{{{
-    return ['gnu', 'bsd', 'linux']
+function! dcs#register_style(name, dict) "{{{
+    if s:check_style_dict(a:dict)
+        let s:coding_styles[a:name] = a:dict
+    endif
+endfunction "}}}
+function! s:check_style_dict(dict) "{{{
+    return
+    \   has_key(a:dict, 'detect_from_lines')
+    \   && has_key(a:dict, 'excmd')
+endfunction "}}}
+
+function! dcs#register_installed_styles() "{{{
+    if exists('s:done_register_installed_styles')
+        return
+    endif
+
+    for file in split(globpath(&rtp, 'autoload/dcs/styles/*.vim'), '\n')
+        let name = fnamemodify(file, ':t:r')
+        let style = dcs#styles#{name}#define()
+        if s:check_style_dict(style)
+            let s:coding_styles[name] = style
+        else
+            echohl WarningMsg
+            echomsg "warning: dcs: plugin '" . name
+            \   . "' returned invalid object."
+            echohl None
+        endif
+    endfor
+
+    let s:done_register_installed_styles = 1
 endfunction "}}}
 
 function! dcs#detect_from_lines(lines) "{{{
-    for style in dcs#get_available_styles()
-        if s:is_maybe_{style}(a:lines)
-            execute g:dcs_coding_styles[style]
-            let b:dcs_current_style = style
-            break
-        endif
-    endfor
-    if !exists('b:dcs_current_style')
-    \   && has_key(g:dcs_coding_styles, 'user')
-        execute g:dcs_coding_styles.user
-        let b:dcs_current_style = 'user'
-    endif
-endfunction "}}}
-
-function! s:is_maybe_gnu(lines) "{{{
-    " Tabs and whitespaces are mixed.
-    let sp = 0
-    let tab = 0
-    for l in a:lines
-        if l =~# '^ \+'
-            let sp = 1
-        elseif l =~# '^\t\+'
-            let tab = 1
-        endif
-        if sp && tab
+    for name in sort(keys(s:coding_styles))
+        let style = s:coding_styles[name]
+        if style.detect_from_lines(a:lines)
+            execute style.excmd
+            let b:dcs_current_style = name
             return 1
         endif
     endfor
-    if sp && tab
-        return 1
-    endif
-    return 0
-endfunction "}}}
-
-" TODO
-function! s:is_maybe_bsd(lines) "{{{
-    return 0
-endfunction "}}}
-
-" TODO
-function! s:is_maybe_linux(lines) "{{{
     return 0
 endfunction "}}}
 
