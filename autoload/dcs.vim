@@ -45,18 +45,20 @@ function! dcs#supported_filetype(filetype) "{{{
     return has_key(s:filetype_vs_range_pattern, a:filetype)
 endfunction "}}}
 
+function! dcs#get_available_styles() "{{{
+    return ['gnu', 'bsd', 'linux']
+endfunction "}}}
 
 function! dcs#detect_from_lines(lines) "{{{
-    if s:is_maybe_gnu(a:lines)
-        execute g:dcs_coding_styles.gnu
-        let b:dcs_current_style = 'gnu'
-    elseif s:is_maybe_bsd(a:lines)
-        execute g:dcs_coding_styles.bsd
-        let b:dcs_current_style = 'bsd'
-    elseif s:is_maybe_linux(a:lines)
-        execute g:dcs_coding_styles.linux
-        let b:dcs_current_style = 'linux'
-    elseif has_key(g:dcs_coding_styles, 'user')
+    for style in dcs#get_available_styles()
+        if s:is_maybe_{style}(a:lines)
+            execute g:dcs_coding_styles[style]
+            let b:dcs_current_style = style
+            break
+        endif
+    endfor
+    if !exists('b:dcs_current_style')
+    \   && has_key(g:dcs_coding_styles, 'user')
         execute g:dcs_coding_styles.user
         let b:dcs_current_style = 'user'
     endif
