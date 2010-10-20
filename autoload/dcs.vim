@@ -56,6 +56,9 @@ function! s:register_installed_detectors() "{{{
     for file in split(globpath(&rtp, 'autoload/dcs/detectors/*.vim'), '\n')
         let name = fnamemodify(file, ':t:r')
         let detector = dcs#detectors#{name}#define()
+        if exists('*dcs#detectors#' . name . '#style_name')
+            let name = dcs#detectors#{name}#style_name()
+        endif
         if !s:DetectorManager.register(name, detector)
             echohl WarningMsg
             echomsg "warning: dcs: plugin '" . name

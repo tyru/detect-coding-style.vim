@@ -7,6 +7,10 @@ set cpo&vim
 " }}}
 
 
+function! dcs#detectors#bsd#style_name() "{{{
+    return 'BSD'
+endfunction "}}}
+
 function! dcs#detectors#bsd#define() "{{{
     let o = {}
     let o.hook_excmd =

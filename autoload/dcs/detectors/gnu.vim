@@ -7,6 +7,10 @@ set cpo&vim
 " }}}
 
 
+function! dcs#detectors#gnu#style_name() "{{{
+    return 'GNU'
+endfunction "}}}
+
 function! dcs#detectors#gnu#define() "{{{
     let o = {}
     let o.hook_excmd =

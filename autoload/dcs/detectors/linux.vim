@@ -7,6 +7,10 @@ set cpo&vim
 " }}}
 
 
+function! dcs#detectors#linux#style_name() "{{{
+    return 'Linux'
+endfunction "}}}
+
 function! dcs#detectors#linux#define() "{{{
     let o = {}
     let o.hook_excmd =
