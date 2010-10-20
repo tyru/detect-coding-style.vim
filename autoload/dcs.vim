@@ -133,7 +133,7 @@ function! s:DetectorManager.delegate_each(method_name, args) "{{{
         if call(detector[a:method_name], a:args, detector)
             let style = s:StyleManager.get_style(name)
             execute style.hook_excmd
-            let b:dcs_current_detector = name
+            let b:dcs_current_style = name
             return
         endif
     endfor
