@@ -49,6 +49,12 @@ endfunction "}}}
 function! dcs#set_detector_attr(...) "{{{
     return call(s:DetectorManager.set_detector_attr, a:000, s:DetectorManager)
 endfunction "}}}
+function! dcs#register_detector(...) "{{{
+    return call(s:DetectorManager.register_detector, a:000, s:DetectorManager)
+endfunction "}}}
+function! dcs#register_style(...) "{{{
+    return call(s:StyleManager.register_style, a:000, s:StyleManager)
+endfunction "}}}
 
 
 " s:DetectorManager {{{
