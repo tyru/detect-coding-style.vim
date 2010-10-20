@@ -46,6 +46,9 @@ endfunction "}}}
 function! dcs#supported_filetype(filetype) "{{{
     return has_key(s:filetype_vs_range_pattern, a:filetype)
 endfunction "}}}
+function! dcs#set_detector_attr(...) "{{{
+    return call(s:DetectorManager.set_detector_attr, a:000, s:DetectorManager)
+endfunction "}}}
 
 
 " s:DetectorManager {{{
@@ -117,6 +120,12 @@ function! s:DetectorManager.delegate_each(method_name, args) "{{{
 endfunction "}}}
 function! s:DetectorManager.run_hook_excmd(name) "{{{
     execute self.get_detector(a:name).hook_excmd
+endfunction "}}}
+function! s:DetectorManager.set_detector_attr(name, attr, Value) "{{{
+    let detector = self.get_detector(a:name)
+    if has_key(detector, a:attr)
+        let detector[a:attr] = a:Value
+    endif
 endfunction "}}}
 
 " }}}
