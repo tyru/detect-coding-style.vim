@@ -57,7 +57,6 @@ let s:DetectorManager = {'__detectors': {}}
 function! s:DetectorManager.register_detector(name, detector) "{{{
     if self._check_detector_dict(a:detector)
     \   && !has_key(self.__detectors, a:name)
-    \   && s:StyleManager.has_style(a:name)
         let self.__detectors[a:name] = a:detector
         return 1
     endif
@@ -99,6 +98,13 @@ function! s:DetectorManager._register_installed_detectors() "{{{
         let detector = dcs#detectors#{name}#define()
         if exists('*dcs#detectors#' . name . '#define_name')
             let name = dcs#detectors#{name}#define_name()
+        endif
+        if !s:StyleManager.has_style(name)
+            echohl WarningMsg
+            echomsg "warning: dcs: style '" . name
+            \   . "' is not installed."
+            echohl None
+            continue
         endif
         if !self.register_detector(name, detector)
             echohl WarningMsg
