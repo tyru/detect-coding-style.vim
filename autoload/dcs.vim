@@ -121,8 +121,8 @@ function! s:DetectorManager._register_installed_detectors() "{{{
     endfor
 
     " This code must be run only once.
-    autocmd User dcs-initilized-detectors :    " dummy
-    doautocmd User dcs-initilized-detectors
+    autocmd User dcs-initialized-detectors :    " dummy
+    doautocmd User dcs-initialized-detectors
 
     let self.__done_register_installed_detectors = 1
 endfunction "}}}
@@ -202,8 +202,8 @@ function! s:StyleManager._register_installed_styles() "{{{
     endfor
 
     " This code must be run only once.
-    autocmd User dcs-initilized-styles :    " dummy
-    doautocmd User dcs-initilized-styles
+    autocmd User dcs-initialized-styles :    " dummy
+    doautocmd User dcs-initialized-styles
 
     let self.__done_register_installed_styles = 1
 endfunction "}}}
