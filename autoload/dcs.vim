@@ -38,36 +38,7 @@ function! dcs#detect_from_bufnr(bufnr) "{{{
         return NONE
     endif
 
-    call s:register_installed_detectors()
     return dcs#detect_from_lines(whole_lines[start : end])
-endfunction "}}}
-function! s:register_installed_detectors() "{{{
-    if exists('s:done_register_installed_detectors')
-        return
-    endif
-
-    " autoload/dcs/detectors/*.vim settings is only about tab.
-    " See the followings for the details:
-    "   http://www.jukie.net/bart/blog/vim-and-linux-coding-style
-    "   http://yuanjie-huang.blogspot.com/2009/03/vim-in-gnu-coding-style.html
-    "   http://en.wikipedia.org/wiki/Indent_style
-    " But wikipedia is dubious, I think :(
-
-    for file in split(globpath(&rtp, 'autoload/dcs/detectors/*.vim'), '\n')
-        let name = fnamemodify(file, ':t:r')
-        let detector = dcs#detectors#{name}#define()
-        if exists('*dcs#detectors#' . name . '#style_name')
-            let name = dcs#detectors#{name}#style_name()
-        endif
-        if !s:DetectorManager.register(name, detector)
-            echohl WarningMsg
-            echomsg "warning: dcs: plugin '" . name
-            \   . "' returned invalid object."
-            echohl None
-        endif
-    endfor
-
-    let s:done_register_installed_detectors = 1
 endfunction "}}}
 function! dcs#detect_from_lines(...) "{{{
     call s:DetectorManager.delegate_each('detect_from_lines', a:000)
@@ -92,9 +63,49 @@ function! s:DetectorManager._check_detector_dict(dict) "{{{
     \   has_key(a:dict, 'detect_from_lines')
     \   && has_key(a:dict, 'hook_excmd')
 endfunction "}}}
+function! s:DetectorManager.get_detector(name, ...) "{{{
+    call self._register_installed_detectors()
+    if a:0
+        return get(self.__detectors, a:name, a:1)
+    else
+        return self.__detectors[a:name]
+    endif
+endfunction "}}}
+function! s:DetectorManager.get_all_detector_names() "{{{
+    call self._register_installed_detectors()
+    return sort(keys(self.__detectors))
+endfunction "}}}
+function! s:DetectorManager._register_installed_detectors() "{{{
+    if has_key(self, '__done_register_installed_detectors')
+        return
+    endif
+
+    " autoload/dcs/detectors/*.vim settings is only about tab.
+    " See the followings for the details:
+    "   http://www.jukie.net/bart/blog/vim-and-linux-coding-style
+    "   http://yuanjie-huang.blogspot.com/2009/03/vim-in-gnu-coding-style.html
+    "   http://en.wikipedia.org/wiki/Indent_style
+    " But wikipedia is dubious, I think :(
+
+    for file in split(globpath(&rtp, 'autoload/dcs/detectors/*.vim'), '\n')
+        let name = fnamemodify(file, ':t:r')
+        let detector = dcs#detectors#{name}#define()
+        if exists('*dcs#detectors#' . name . '#style_name')
+            let name = dcs#detectors#{name}#style_name()
+        endif
+        if !s:DetectorManager.register(name, detector)
+            echohl WarningMsg
+            echomsg "warning: dcs: plugin '" . name
+            \   . "' returned invalid object."
+            echohl None
+        endif
+    endfor
+
+    let self.__done_register_installed_detectors = 1
+endfunction "}}}
 function! s:DetectorManager.delegate_each(method_name, args) "{{{
-    for name in sort(keys(self.__detectors))
-        let detector = self.__detectors[name]
+    for name in self.get_all_detector_names()
+        let detector = self.get_detector(name)
 
         if call(detector[a:method_name], a:args, detector)
             execute detector.hook_excmd
@@ -104,10 +115,7 @@ function! s:DetectorManager.delegate_each(method_name, args) "{{{
     endfor
 endfunction "}}}
 function! s:DetectorManager.run_hook_excmd(detector_name) "{{{
-    execute self.__detectors[a:detector_name].hook_excmd
-endfunction "}}}
-function! s:DetectorManager.get_all_detector_names() "{{{
-    return sort(keys(self.__detectors))
+    execute self.get_detector(a:detector_name).hook_excmd
 endfunction "}}}
 
 " }}}
