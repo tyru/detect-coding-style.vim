@@ -114,7 +114,7 @@ endfunction "}}}
 function! dcs#_cmd_coding_style(choice) "{{{
     call s:DetectorManager.run_hook_excmd(a:choice)
 endfunction "}}}
-function! dcs#_cmd_complete_conding_style(...) "{{{
+function! dcs#_cmd_complete_coding_style(...) "{{{
     return s:DetectorManager.get_all_detector_names()
 endfunction "}}}
 

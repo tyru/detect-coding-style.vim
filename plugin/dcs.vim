@@ -23,7 +23,7 @@ command!
 \   DetectCodingStyle
 \   call dcs#detect_from_bufnr(expand('%'))
 command!
-\   -bar -nargs=1 -complete=customlist,dcs#_cmd_complete_conding_style
+\   -bar -nargs=1 -complete=customlist,dcs#_cmd_complete_coding_style
 \   CodingStyle
 \   call dcs#_cmd_coding_style(<q-args>)
 
