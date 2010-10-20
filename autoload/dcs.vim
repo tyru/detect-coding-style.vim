@@ -105,6 +105,10 @@ function! s:DetectorManager._register_installed_detectors() "{{{
         endif
     endfor
 
+    " This code must be run only once.
+    autocmd User dcs-initilized-detectors :    " dummy
+    doautocmd User dcs-initilized-detectors
+
     let self.__done_register_installed_detectors = 1
 endfunction "}}}
 function! s:DetectorManager.delegate_each(method_name, args) "{{{
