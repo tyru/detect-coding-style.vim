@@ -203,6 +203,10 @@ endfunction "}}}
 function! dcs#_cmd_coding_style(choice) "{{{
     if s:StyleManager.has_style(a:choice)
         execute s:StyleManager.get_style(a:choice).hook_excmd
+    else
+        echohl ErrorMsg
+        echomsg "error: dcs: No such style '" . style . "'."
+        echohl None
     endif
 endfunction "}}}
 function! dcs#_cmd_complete_coding_style(...) "{{{
