@@ -53,6 +53,7 @@ let s:DetectorManager = {'__detectors': {}}
 
 function! s:DetectorManager.register(name, detector) "{{{
     if self._check_detector_dict(a:detector)
+    \   && !has_key(self.__detectors, a:name)
         let self.__detectors[a:name] = a:detector
         return 1
     endif
