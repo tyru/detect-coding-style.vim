@@ -7,7 +7,7 @@ set cpo&vim
 " }}}
 
 
-function! dcs#detectors#bsd#style_name() "{{{
+function! dcs#detectors#bsd#define_name() "{{{
     return 'BSD'
 endfunction "}}}
 

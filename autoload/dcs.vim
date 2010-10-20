@@ -94,8 +94,8 @@ function! s:DetectorManager._register_installed_detectors() "{{{
     for file in split(globpath(&rtp, 'autoload/dcs/detectors/*.vim'), '\n')
         let name = fnamemodify(file, ':t:r')
         let detector = dcs#detectors#{name}#define()
-        if exists('*dcs#detectors#' . name . '#style_name')
-            let name = dcs#detectors#{name}#style_name()
+        if exists('*dcs#detectors#' . name . '#define_name')
+            let name = dcs#detectors#{name}#define_name()
         endif
         if !self.register_detector(name, detector)
             echohl WarningMsg

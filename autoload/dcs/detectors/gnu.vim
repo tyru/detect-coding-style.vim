@@ -7,7 +7,7 @@ set cpo&vim
 " }}}
 
 
-function! dcs#detectors#gnu#style_name() "{{{
+function! dcs#detectors#gnu#define_name() "{{{
     return 'GNU'
 endfunction "}}}
 

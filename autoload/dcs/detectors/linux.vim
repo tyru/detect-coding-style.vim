@@ -7,7 +7,7 @@ set cpo&vim
 " }}}
 
 
-function! dcs#detectors#linux#style_name() "{{{
+function! dcs#detectors#linux#define_name() "{{{
     return 'Linux'
 endfunction "}}}
 
