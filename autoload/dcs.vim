@@ -115,8 +115,8 @@ function! s:DetectorManager.delegate_each(method_name, args) "{{{
         endif
     endfor
 endfunction "}}}
-function! s:DetectorManager.run_hook_excmd(detector_name) "{{{
-    execute self.get_detector(a:detector_name).hook_excmd
+function! s:DetectorManager.run_hook_excmd(name) "{{{
+    execute self.get_detector(a:name).hook_excmd
 endfunction "}}}
 
 " }}}
