@@ -51,7 +51,7 @@ endfunction "}}}
 " s:DetectorManager {{{
 let s:DetectorManager = {'__detectors': {}}
 
-function! s:DetectorManager.register(name, detector) "{{{
+function! s:DetectorManager.register_detector(name, detector) "{{{
     if self._check_detector_dict(a:detector)
     \   && !has_key(self.__detectors, a:name)
         let self.__detectors[a:name] = a:detector
@@ -94,7 +94,7 @@ function! s:DetectorManager._register_installed_detectors() "{{{
         if exists('*dcs#detectors#' . name . '#style_name')
             let name = dcs#detectors#{name}#style_name()
         endif
-        if !s:DetectorManager.register(name, detector)
+        if !s:DetectorManager.register_detector(name, detector)
             echohl WarningMsg
             echomsg "warning: dcs: plugin '" . name
             \   . "' returned invalid object."
