@@ -13,9 +13,6 @@ endfunction "}}}
 
 function! dcs#detectors#gnu#define() "{{{
     let o = {}
-    let o.hook_excmd =
-    \   'setlocal expandtab tabstop=8 '
-    \   . 'shiftwidth=2 softtabstop=2 preserveindent'
     function! o.detect_from_lines(lines)
         " Tabs and whitespaces are mixed.
         let sp = 0

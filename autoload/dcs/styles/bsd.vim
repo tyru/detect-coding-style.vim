@@ -7,15 +7,15 @@ set cpo&vim
 " }}}
 
 
-function! dcs#detectors#linux#define_name() "{{{
-    return 'Linux'
+function! dcs#styles#bsd#define_name() "{{{
+    return 'BSD'
 endfunction "}}}
 
-function! dcs#detectors#linux#define() "{{{
+function! dcs#styles#bsd#define() "{{{
     let o = {}
-    function! o.detect_from_lines(lines)
-        return 0    " TODO
-    endfunction
+    let o.hook_excmd =
+    \   'setlocal expandtab tabstop=8 '
+    \   . 'shiftwidth=4 softtabstop& preserveindent'
 
     return o
 endfunction "}}}
