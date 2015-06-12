@@ -217,7 +217,7 @@ function! dcs#_cmd_coding_style(choice) "{{{
         execute s:StyleManager.get_style(a:choice).hook_excmd
     else
         echohl ErrorMsg
-        echomsg "error: dcs: No such style '" . style . "'."
+        echomsg "error: dcs: No such style '" . a:choice . "'."
         echohl None
     endif
 endfunction "}}}
